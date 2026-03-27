@@ -1,44 +1,103 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const [cart, setCart] = useState([]);
   const [wishlist, setWishlist] = useState([]);
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
+  const [toastMsg, setToastMsg] = useState(null);
+  const [toastType, setToastType] = useState("success");
 
-  const addToCart = (product) => {
-    const exists = cart.find((item) => item.id === product.id);
-    if (exists) {
-      updateQuantity(product.id, exists.qty + 1);
-    } else {
-      setCart([...cart, { ...product, qty: 1 }]);
-    }
-  };
+  const showToast = useCallback((msg, type = "success") => {
+    setToastMsg(msg);
+    setToastType(type);
+    setTimeout(() => setToastMsg(null), 2800);
+  }, []);
 
-  const updateQuantity = (id, qty) => {
-    if (qty <= 0) { removeFromCart(id); return; }
-    setCart(cart.map((item) => item.id === id ? { ...item, qty } : item));
-  };
+  const addToCart = useCallback(
+    (product, qty = 1) => {
+      setCart((prev) => {
+        const exists = prev.find((i) => i.id === product.id);
+        if (exists)
+          return prev.map((i) =>
+            i.id === product.id ? { ...i, qty: i.qty + qty } : i
+          );
+        return [...prev, { ...product, qty }];
+      });
 
-  const removeFromCart = (id) => setCart(cart.filter((item) => item.id !== id));
+      showToast(`${product.shortName || product.name} added to bag ✓`);
+    },
+    [showToast]
+  );
 
-  const toggleWishlist = (product) => {
-    const exists = wishlist.find((item) => item.id === product.id);
-    if (exists) setWishlist(wishlist.filter((item) => item.id !== product.id));
-    else setWishlist([...wishlist, product]);
-  };
+  const removeFromCart = useCallback(
+    (id) => {
+      setCart((prev) => prev.filter((i) => i.id !== id));
+      showToast("Item removed from bag", "info");
+    },
+    [showToast]
+  );
 
-  const isWishlisted = (id) => wishlist.some((item) => item.id === id);
+  const updateQuantity = useCallback(
+    (id, qty) => {
+      if (qty <= 0) {
+        removeFromCart(id);
+        return;
+      }
 
-  const cartCount = cart.reduce((t, item) => t + item.qty, 0);
-  const cartTotal = cart.reduce((t, item) => t + item.price * item.qty, 0);
+      setCart((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, qty } : i))
+      );
+    },
+    [removeFromCart] // ✅ FIXED: added dependency
+  );
+
+  const toggleWishlist = useCallback(
+    (product) => {
+      setWishlist((prev) => {
+        const exists = prev.find((i) => i.id === product.id);
+
+        if (exists) {
+          showToast("Removed from wishlist", "info");
+          return prev.filter((i) => i.id !== product.id);
+        }
+
+        showToast(`${product.shortName || product.name} wishlisted ♥`);
+        return [...prev, product];
+      });
+    },
+    [showToast]
+  );
+
+  const addRecentlyViewed = useCallback((product) => {
+    setRecentlyViewed((prev) =>
+      [product, ...prev.filter((p) => p.id !== product.id)].slice(0, 8)
+    );
+  }, []);
+
+  const isWishlisted = (id) => wishlist.some((i) => i.id === id);
+  const cartCount = cart.reduce((t, i) => t + i.qty, 0);
+  const cartTotal = cart.reduce((t, i) => t + i.price * i.qty, 0);
 
   return (
-    <CartContext.Provider value={{
-      cart, addToCart, updateQuantity, removeFromCart,
-      wishlist, toggleWishlist, isWishlisted,
-      cartCount, cartTotal,
-    }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        updateQuantity,
+        removeFromCart,
+        wishlist,
+        toggleWishlist,
+        isWishlisted,
+        recentlyViewed,
+        addRecentlyViewed,
+        cartCount,
+        cartTotal,
+        toastMsg,
+        toastType,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
