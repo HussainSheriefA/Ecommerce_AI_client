@@ -1,0 +1,15 @@
+const notFound = (req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: `Route not found: ${req.originalUrl}`
+  });
+};
+
+const errorHandler = (err, req, res, next) => {
+  res.status(500).json({
+    success: false,
+    message: err.message || 'Internal Server Error'
+  });
+};
+
+module.exports = { notFound, errorHandler };
