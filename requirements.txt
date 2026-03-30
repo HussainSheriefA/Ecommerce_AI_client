@@ -5,6 +5,8 @@ django-cors-headers>=4.0.0
 
 # Database
 mysqlclient>=2.1.0
+psycopg2-binary>=2.9.0
+dj-database-url>=2.0.0
 
 # Authentication & JWT
 djangorestframework-simplejwt>=5.2.0
