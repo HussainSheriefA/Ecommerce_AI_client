@@ -1,9 +1,8 @@
-// Use environment variable for API URL, fallback to localhost for development
-// For Vercel deployment, set REACT_APP_API_URL in environment variables
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
-
-// For demo purposes, if API fails, we'll use local storage as fallback
-let useLocalFallback = false;
+// API URL configuration
+// For Vercel: uses same domain (/api/* routes are handled by serverless functions)
+// For local dev: uses localhost:5000
+const isLocalhost = window.location.hostname === 'localhost';
+const API_URL = isLocalhost ? 'http://localhost:5000/api' : '/api';
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
