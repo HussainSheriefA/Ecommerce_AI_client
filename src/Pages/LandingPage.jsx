@@ -298,7 +298,7 @@ function PCard({ p, i }) {
 }
 
 /* ─── MAIN PAGE ─────────────────────────── */
-export default function LandingPage({ products }) {
+export default function LandingPage({ products: propProducts }) {
   const { cartCount, toastMsg, toastType } = useCart();
   const navigate = useNavigate();
   const [heroIdx, setHeroIdx] = useState(0);
@@ -308,9 +308,55 @@ export default function LandingPage({ products }) {
   const [navScrolled, setNavScrolled] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [products, setProducts] = useState(propProducts || []);
+  const [isLoading, setIsLoading] = useState(!propProducts);
   const { scrollY } = useScroll();
   const pY = useTransform(scrollY, [0,700], [0,160]);
   const pO = useTransform(scrollY, [0,500], [1,0]);
+
+  // Fetch products from API if not provided as props
+  useEffect(() => {
+    if (!propProducts || propProducts.length === 0) {
+      fetchProducts();
+    }
+  }, [propProducts]);
+
+  const fetchProducts = async () => {
+    try {
+      setIsLoading(true);
+      const { productAPI } = await import('../services/api');
+      const response = await productAPI.getAll({ limit: 100 });
+      if (response.success && response.data.products) {
+        // Transform backend products to match frontend format
+        const transformedProducts = response.data.products.map(p => ({
+          id: p._id,
+          name: p.name,
+          shortName: p.shortName || p.name,
+          price: p.price,
+          originalPrice: p.originalPrice || p.price,
+          category: p.category,
+          brand: p.brand,
+          image: p.image,
+          images: p.images || [p.image],
+          rating: p.rating || 0,
+          reviews: p.reviews || 0,
+          badge: p.badge,
+          stock: p.stock || 0,
+          description: p.description,
+          features: p.features || [],
+          specs: p.specs || {},
+          isNew: p.badge === 'New Arrival',
+          isTrending: p.badge === 'Best Seller',
+          color: '#c9a84c'
+        }));
+        setProducts(transformedProducts);
+      }
+    } catch (error) {
+      console.error('Failed to fetch products:', error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     const t = setInterval(() => setHeroIdx(i => (i+1)%HERO_SLIDES.length), 5800);
@@ -371,7 +417,7 @@ export default function LandingPage({ products }) {
           <motion.button className="nav-icon" onClick={() => setShowSearch(s => !s)} whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
             {showSearch ? "✕" : "⌕"}
           </motion.button>
-          <motion.button className="nav-icon" whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
+          <motion.button className="nav-icon" onClick={() => navigate("/login")} whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
             👤
           </motion.button>
           <motion.button className="nav-icon" whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>

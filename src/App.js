@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LandingPage from "./Pages/LandingPage";
 import ProductPage from "./Pages/ProductPage";
 import CartPage from "./Pages/CartPage";
+import LoginPage from "./Pages/LoginPage";
+import SignupPage from "./Pages/SignupPage";
 import { CartProvider } from "./context/CartContext";
 
 export const products = [
@@ -136,6 +138,8 @@ function App() {
           <Route path="/" element={<LandingPage products={products}/>}/>
           <Route path="/product/:id" element={<ProductPage products={products}/>}/>
           <Route path="/cart" element={<CartPage/>}/>
+          <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/signup" element={<SignupPage/>}/>
         </Routes>
       </BrowserRouter>
     </CartProvider>
