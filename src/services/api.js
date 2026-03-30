@@ -1,8 +1,8 @@
 // API URL configuration
-// For local dev: uses localhost:5000
+// For local dev: uses Django backend on port 8000
 // For production: uses Render Django backend
 const isLocalhost = window.location.hostname === 'localhost';
-const API_URL = isLocalhost ? 'http://localhost:5000/api' : 'https://ecommerce-ai-client-n5gj.onrender.com/api';
+const API_URL = isLocalhost ? 'http://localhost:8000/api' : 'https://ecommerce-ai-client-n5gj.onrender.com/api';
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {

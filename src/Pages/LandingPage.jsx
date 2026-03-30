@@ -310,7 +310,31 @@ export default function LandingPage({ products: propProducts }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [products, setProducts] = useState(propProducts || []);
   const [, setIsLoading] = useState(!propProducts);
+  const [user, setUser] = useState(null);
   const { scrollY } = useScroll();
+
+  // Check if user is logged in
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+  }, []);
+
+  const getInitials = (name) => {
+    if (!name) return "U";
+    return name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
+  };
+
+  const getAvatarColor = (name) => {
+    if (!name) return "#c9a84c";
+    const colors = ["#c9a84c", "#6aada8", "#9b8ab5", "#e05c5c", "#7898b0"];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  };
   const pY = useTransform(scrollY, [0,700], [0,160]);
   const pO = useTransform(scrollY, [0,500], [1,0]);
 
@@ -417,9 +441,21 @@ export default function LandingPage({ products: propProducts }) {
           <motion.button className="nav-icon" onClick={() => setShowSearch(s => !s)} whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
             {showSearch ? "✕" : "⌕"}
           </motion.button>
-          <motion.button className="nav-icon" onClick={() => navigate("/login")} whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
-            👤
-          </motion.button>
+          {user ? (
+            <motion.button 
+              className="nav-avatar" 
+              onClick={() => navigate("/profile")}
+              whileHover={{ scale:1.1 }} 
+              whileTap={{ scale:0.95 }}
+              style={{ backgroundColor: getAvatarColor(user.name) }}
+            >
+              {getInitials(user.name)}
+            </motion.button>
+          ) : (
+            <motion.button className="nav-icon" onClick={() => navigate("/login")} whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
+              👤
+            </motion.button>
+          )}
           <motion.button className="nav-icon" whileHover={{ scale:1.15, background:"rgba(201,168,76,0.12)" }} whileTap={{ scale:0.88 }}>
             ♡
           </motion.button>

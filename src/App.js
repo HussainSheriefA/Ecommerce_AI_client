@@ -5,6 +5,7 @@ import ProductPage from "./Pages/ProductPage";
 import CartPage from "./Pages/CartPage";
 import LoginPage from "./Pages/LoginPage";
 import SignupPage from "./Pages/SignupPage";
+import ProfilePage from "./Pages/ProfilePage";
 import { CartProvider } from "./context/CartContext";
 
 export const products = [
@@ -140,6 +141,7 @@ function App() {
           <Route path="/cart" element={<CartPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
           <Route path="/signup" element={<SignupPage/>}/>
+          <Route path="/profile" element={<ProfilePage/>}/>
         </Routes>
       </BrowserRouter>
     </CartProvider>
