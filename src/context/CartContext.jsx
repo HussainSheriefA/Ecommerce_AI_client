@@ -9,7 +9,7 @@ export function CartProvider({ children }) {
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [toastMsg, setToastMsg] = useState(null);
   const [toastType, setToastType] = useState("success");
-  const [isLoading, setIsLoading] = useState(false);
+  const [, setIsLoading] = useState(false);
 
   // Load cart from backend when user is logged in
   useEffect(() => {

@@ -309,7 +309,7 @@ export default function LandingPage({ products: propProducts }) {
   const [showSearch, setShowSearch] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [products, setProducts] = useState(propProducts || []);
-  const [isLoading, setIsLoading] = useState(!propProducts);
+  const [, setIsLoading] = useState(!propProducts);
   const { scrollY } = useScroll();
   const pY = useTransform(scrollY, [0,700], [0,160]);
   const pO = useTransform(scrollY, [0,500], [1,0]);

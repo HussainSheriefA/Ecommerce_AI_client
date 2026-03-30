@@ -1,4 +1,9 @@
-const API_URL = 'http://localhost:5000/api';
+// Use environment variable for API URL, fallback to localhost for development
+// For Vercel deployment, set REACT_APP_API_URL in environment variables
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
+// For demo purposes, if API fails, we'll use local storage as fallback
+let useLocalFallback = false;
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
@@ -18,14 +23,22 @@ const apiCall = async (endpoint, options = {}) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, config);
-  const data = await response.json();
+  try {
+    const response = await fetch(url, config);
+    const data = await response.json();
 
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong');
+    if (!response.ok) {
+      throw new Error(data.message || 'Something went wrong');
+    }
+
+    return data;
+  } catch (error) {
+    // If it's a network error (backend not available), throw a user-friendly error
+    if (error.message === 'Failed to fetch') {
+      throw new Error('Unable to connect to server. Please try again later.');
+    }
+    throw error;
   }
-
-  return data;
 };
 
 // Auth APIs
