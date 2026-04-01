@@ -26,6 +26,14 @@ const apiCall = async (endpoint, options = {}) => {
 
   try {
     const response = await fetch(url, config);
+    
+    // Check if response is HTML (error page)
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('text/html')) {
+      console.error('Received HTML instead of JSON from:', url);
+      throw new Error('Server returned an error page. Please check if the backend is running.');
+    }
+    
     const data = await response.json();
 
     if (!response.ok) {
@@ -43,6 +51,17 @@ const apiCall = async (endpoint, options = {}) => {
       });
       throw new Error('Unable to connect to server. Please check your internet connection and try again.');
     }
+    
+    // If it's a JSON parse error (HTML received instead of JSON)
+    if (error.message.includes('Unexpected token') || error.message.includes('<!DOCTYPE')) {
+      console.error('API Response Error:', {
+        url,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+      throw new Error('Backend server error. Please try again later or contact support.');
+    }
+    
     throw error;
   }
 };
