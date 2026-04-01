@@ -38,13 +38,16 @@ export default function SignupPage() {
         password: formData.password
       });
       
-      // Save token to localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      console.log('Registration response:', response);
+      
+      // Save token to localStorage (Django returns 'access' not 'token')
+      localStorage.setItem('token', response.access || response.data?.access);
+      localStorage.setItem('user', JSON.stringify(response.user || response.data?.user));
       
       // Redirect to profile page
       navigate("/profile");
     } catch (err) {
+      console.error('Registration error:', err);
       setError(err.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);

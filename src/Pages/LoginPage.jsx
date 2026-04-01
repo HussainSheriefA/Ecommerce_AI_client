@@ -63,13 +63,16 @@ export default function LoginPage() {
     try {
       const response = await authAPI.login(formData);
       
-      // Save token to localStorage
-      localStorage.setItem('token', response.data.token);
-      localStorage.setItem('user', JSON.stringify(response.data.user));
+      console.log('Login response:', response);
+      
+      // Save token to localStorage (Django returns 'access' not 'token')
+      localStorage.setItem('token', response.access || response.data?.access);
+      localStorage.setItem('user', JSON.stringify(response.user || response.data?.user));
       
       // Redirect to profile page
       navigate("/profile");
     } catch (err) {
+      console.error('Login error:', err);
       setError(err.message || "Invalid email or password");
     } finally {
       setIsLoading(false);
