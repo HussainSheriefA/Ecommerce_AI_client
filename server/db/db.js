@@ -34,6 +34,22 @@ const connectDB = async () => {
       }
     }
 
+    // Fallback to local MongoDB if available (persistent)
+    const localUri = process.env.MONGODB_LOCAL_URI || 'mongodb://localhost:27017/ecommerceai';
+    try {
+      console.log('Trying local MongoDB fallback...', localUri);
+      const localConn = await mongoose.connect(localUri, {
+        dbName: process.env.DB_NAME || 'ecommerceai',
+        serverSelectionTimeoutMS: 5000,
+        maxPoolSize: 10
+      });
+      console.log('✅ MongoDB Connected (Local):', localConn.connection.host);
+      console.log('Database:', localConn.connection.name);
+      return;
+    } catch (localError) {
+      console.warn('⚠️ Local MongoDB not available:', localError.message);
+    }
+
     // Fallback to in-memory database
     console.log('Switching to In-Memory Database...');
     mongod = await MongoMemoryServer.create();
