@@ -70,8 +70,8 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # MIDDLEWARE
 # =============================================================================
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # MUST BE FIRST
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -257,6 +257,7 @@ SIMPLE_JWT = {
 # =============================================================================
 # CORS CONFIGURATION
 # =============================================================================
+# Allow specific origins for production (Vercel frontend)
 CORS_ALLOWED_ORIGINS = os.getenv(
     'CORS_ALLOWED_ORIGINS',
     'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,https://ecommerce-ai-client-tau.vercel.app'
@@ -267,13 +268,13 @@ CSRF_TRUSTED_ORIGINS = os.getenv(
     'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,https://ecommerce-ai-client-tau.vercel.app'
 ).split(',')
 
-# Allow all origins for development (fallback if env vars not set)
-CORS_ALLOW_ALL_ORIGINS = True
+# CRITICAL: Must be False when using credentials (cookies/auth headers)
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
 CSRF_COOKIE_SECURE = False
 SESSION_COOKIE_SECURE = False
 
-APPEND_SLASH = False  # Allow URLs without trailing slash
+APPEND_SLASH = True  # Enable Django's standard slash behavior
 
 CORS_ALLOW_CREDENTIALS = True
 
