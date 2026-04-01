@@ -66,14 +66,21 @@ export default function LoginPage() {
       const response = await authAPI.login(formData);
       
       console.log('✅ Login response:', response);
-      console.log('Response type:', typeof response);
-      console.log('Has access?', 'access' in response);
-      console.log('Has user?', 'user' in response);
       
       // Save token to localStorage (Django returns 'access' not 'token')
       if (response && response.access) {
         localStorage.setItem('token', response.access);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        
+        // Fetch user data using the token
+        try {
+          const userResponse = await authAPI.getMe();
+          console.log('👤 User data:', userResponse);
+          localStorage.setItem('user', JSON.stringify(userResponse));
+        } catch (userErr) {
+          console.warn('Could not fetch user data, using email as fallback');
+          // Fallback: store email as user data
+          localStorage.setItem('user', JSON.stringify({ email: formData.email, name: formData.email.split('@')[0] }));
+        }
         
         // Redirect to profile page
         navigate("/profile");

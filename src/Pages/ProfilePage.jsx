@@ -17,8 +17,13 @@ export default function ProfilePage() {
       return;
     }
     
-    if (userData) {
-      setUser(JSON.parse(userData));
+    if (userData && userData !== 'undefined' && userData !== 'null') {
+      try {
+        setUser(JSON.parse(userData));
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        localStorage.removeItem('user');
+      }
     }
     setLoading(false);
   }, [navigate]);
