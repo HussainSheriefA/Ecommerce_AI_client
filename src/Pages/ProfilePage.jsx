@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { authAPI } from "../services/api";
 import "./ProfilePage.css";
 
 export default function ProfilePage() {

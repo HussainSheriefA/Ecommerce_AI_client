@@ -20,6 +20,7 @@ export default function LoginPage() {
         callback: handleGoogleResponse,
       });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleGoogleResponse = async (response) => {

@@ -1,14 +1,27 @@
 // API URL configuration
 // For local dev: uses Django backend on port 8000
 // For production: uses Render Django backend or Vercel serverless
-const isLocalhost = window.location.hostname === 'localhost';
+const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 const API_URL = isLocalhost 
   ? 'http://localhost:8000/api' 
   : process.env.REACT_APP_API_URL || 'https://ecommerce-ai-client-n5gj.onrender.com/api';
 
+console.log('🔧 API Configuration:', {
+  hostname: window.location.hostname,
+  isLocalhost,
+  API_URL,
+  envVar: process.env.REACT_APP_API_URL
+});
+
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
   const url = `${API_URL}${endpoint}`;
+  
+  console.log('📡 API Call:', {
+    endpoint,
+    fullURL: url,
+    method: options.method || 'GET'
+  });
   
   const config = {
     headers: {
