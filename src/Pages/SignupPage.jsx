@@ -36,7 +36,8 @@ export default function SignupPage() {
       const response = await authAPI.register({
         name: formData.name,
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        password_confirm: formData.confirmPassword
       });
       
       console.log('✅ Registration response:', response);

@@ -48,9 +48,16 @@ const apiCall = async (endpoint, options = {}) => {
     }
     
     const data = await response.json();
+    
+    console.log('📥 API Response:', {
+      status: response.status,
+      ok: response.ok,
+      data: data
+    });
 
     if (!response.ok) {
-      throw new Error(data.message || 'Something went wrong');
+      // Django REST Framework returns 'detail' for errors
+      throw new Error(data.detail || data.message || data.error || JSON.stringify(data));
     }
 
     return data;
