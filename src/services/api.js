@@ -1,8 +1,10 @@
 // API URL configuration
 // For local dev: uses Django backend on port 8000
-// For production: uses Render Django backend
+// For production: uses Render Django backend or Vercel serverless
 const isLocalhost = window.location.hostname === 'localhost';
-const API_URL = isLocalhost ? 'http://localhost:8000/api' : 'https://ecommerce-ai-client-n5gj.onrender.com/api';
+const API_URL = isLocalhost 
+  ? 'http://localhost:8000/api' 
+  : process.env.REACT_APP_API_URL || 'https://ecommerce-ai-client-n5gj.onrender.com/api';
 
 // Helper function for API calls
 const apiCall = async (endpoint, options = {}) => {
@@ -33,8 +35,13 @@ const apiCall = async (endpoint, options = {}) => {
     return data;
   } catch (error) {
     // If it's a network error (backend not available), throw a user-friendly error
-    if (error.message === 'Failed to fetch') {
-      throw new Error('Unable to connect to server. Please try again later.');
+    if (error.message === 'Failed to fetch' || error.code === 'ERR_NETWORK') {
+      console.error('API Connection Error:', {
+        url,
+        error: error.message,
+        timestamp: new Date().toISOString()
+      });
+      throw new Error('Unable to connect to server. Please check your internet connection and try again.');
     }
     throw error;
   }
