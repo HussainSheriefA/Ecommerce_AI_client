@@ -81,12 +81,12 @@ const apiCall = async (endpoint, options = {}) => {
 
 // Auth APIs
 export const authAPI = {
-  register: (userData) => apiCall('/auth/register', {
+  register: (userData) => apiCall('/auth/register/', {
     method: 'POST',
     body: JSON.stringify(userData)
   }),
   
-  login: (credentials) => apiCall('/auth/login', {
+  login: (credentials) => apiCall('/auth/login/', {
     method: 'POST',
     body: JSON.stringify(credentials)
   }),
@@ -96,62 +96,62 @@ export const authAPI = {
     body: JSON.stringify({ token })
   }),
   
-  getMe: () => apiCall('/auth/me')
+  getMe: () => apiCall('/auth/me/')
 };
 
 // Product APIs
 export const productAPI = {
   getAll: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/products?${queryString}`);
+    return apiCall(`/products/?${queryString}`);
   },
   
-  getById: (id) => apiCall(`/products/${id}`),
+  getById: (id) => apiCall(`/products/${id}/`),
   
-  create: (productData) => apiCall('/products', {
+  create: (productData) => apiCall('/products/', {
     method: 'POST',
     body: JSON.stringify(productData)
   }),
   
-  update: (id, productData) => apiCall(`/products/${id}`, {
+  update: (id, productData) => apiCall(`/products/${id}/`, {
     method: 'PUT',
     body: JSON.stringify(productData)
   }),
   
-  delete: (id) => apiCall(`/products/${id}`, {
+  delete: (id) => apiCall(`/products/${id}/`, {
     method: 'DELETE'
   })
 };
 
 // Cart APIs
 export const cartAPI = {
-  getCart: () => apiCall('/cart'),
+  getCart: () => apiCall('/cart/'),
   
-  addItem: (productId, quantity = 1) => apiCall('/cart/items', {
+  addItem: (productId, quantity = 1) => apiCall('/cart/items/', {
     method: 'POST',
     body: JSON.stringify({ productId, quantity })
   }),
   
-  updateItem: (itemId, quantity) => apiCall(`/cart/items/${itemId}`, {
+  updateItem: (itemId, quantity) => apiCall(`/cart/items/${itemId}/`, {
     method: 'PUT',
     body: JSON.stringify({ quantity })
   }),
   
-  removeItem: (itemId) => apiCall(`/cart/items/${itemId}`, {
+  removeItem: (itemId) => apiCall(`/cart/items/${itemId}/`, {
     method: 'DELETE'
   })
 };
 
 // Order APIs
 export const orderAPI = {
-  create: (orderData) => apiCall('/orders', {
+  create: (orderData) => apiCall('/orders/', {
     method: 'POST',
     body: JSON.stringify(orderData)
   }),
   
-  getMyOrders: () => apiCall('/orders'),
+  getMyOrders: () => apiCall('/orders/'),
   
-  getOrderById: (id) => apiCall(`/orders/${id}`)
+  getOrderById: (id) => apiCall(`/orders/${id}/`)
 };
 
 export default apiCall;
