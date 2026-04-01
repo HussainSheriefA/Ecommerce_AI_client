@@ -62,18 +62,31 @@ export default function LoginPage() {
     setError("");
 
     try {
+      console.log('🔐 Attempting login with:', formData);
       const response = await authAPI.login(formData);
       
-      console.log('Login response:', response);
+      console.log('✅ Login response:', response);
+      console.log('Response type:', typeof response);
+      console.log('Has access?', 'access' in response);
+      console.log('Has user?', 'user' in response);
       
       // Save token to localStorage (Django returns 'access' not 'token')
-      localStorage.setItem('token', response.access || response.data?.access);
-      localStorage.setItem('user', JSON.stringify(response.user || response.data?.user));
-      
-      // Redirect to profile page
-      navigate("/profile");
+      if (response && response.access) {
+        localStorage.setItem('token', response.access);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        
+        // Redirect to profile page
+        navigate("/profile");
+      } else {
+        throw new Error('Invalid response format from server');
+      }
     } catch (err) {
-      console.error('Login error:', err);
+      console.error('❌ Login error:', err);
+      console.error('Error details:', {
+        message: err.message,
+        name: err.name,
+        stack: err.stack
+      });
       setError(err.message || "Invalid email or password");
     } finally {
       setIsLoading(false);

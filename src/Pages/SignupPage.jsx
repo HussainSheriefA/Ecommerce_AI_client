@@ -32,22 +32,35 @@ export default function SignupPage() {
     }
 
     try {
+      console.log('🔐 Attempting registration with:', formData);
       const response = await authAPI.register({
         name: formData.name,
         email: formData.email,
         password: formData.password
       });
       
-      console.log('Registration response:', response);
+      console.log('✅ Registration response:', response);
+      console.log('Response type:', typeof response);
+      console.log('Has access?', 'access' in response);
+      console.log('Has user?', 'user' in response);
       
       // Save token to localStorage (Django returns 'access' not 'token')
-      localStorage.setItem('token', response.access || response.data?.access);
-      localStorage.setItem('user', JSON.stringify(response.user || response.data?.user));
-      
-      // Redirect to profile page
-      navigate("/profile");
+      if (response && response.access) {
+        localStorage.setItem('token', response.access);
+        localStorage.setItem('user', JSON.stringify(response.user));
+        
+        // Redirect to profile page
+        navigate("/profile");
+      } else {
+        throw new Error('Invalid response format from server');
+      }
     } catch (err) {
-      console.error('Registration error:', err);
+      console.error('❌ Registration error:', err);
+      console.error('Error details:', {
+        message: err.message,
+        name: err.name,
+        stack: err.stack
+      });
       setError(err.message || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
