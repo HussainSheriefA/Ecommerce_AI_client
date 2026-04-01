@@ -38,6 +38,7 @@ DJANGO_APPS = [
 
 THIRD_PARTY_APPS = [
     'rest_framework',
+    'rest_framework.authtoken',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'corsheaders',
@@ -131,13 +132,10 @@ else:
 # =============================================================================
 # CACHE (Redis)
 # =============================================================================
+# Temporarily using local memory cache - Redis not running locally
 CACHES = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': os.getenv('REDIS_URL', 'redis://localhost:6379/0'),
-        'OPTIONS': {
-            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-        }
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'
     }
 }
 
@@ -268,6 +266,8 @@ CSRF_TRUSTED_ORIGINS = os.getenv(
     'CSRF_TRUSTED_ORIGINS',
     'http://localhost:3000,http://127.0.0.1:3000'
 ).split(',')
+
+APPEND_SLASH = False  # Allow URLs without trailing slash
 
 CORS_ALLOW_CREDENTIALS = True
 

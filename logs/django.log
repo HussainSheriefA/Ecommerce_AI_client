@@ -1,1 +1,235 @@
 INFO 2026-03-30 15:30:53,845 autoreload 11748 6104 Watching for file changes with StatReloader
+INFO 2026-04-01 10:03:47,068 autoreload 428 30748 Watching for file changes with StatReloader
+INFO 2026-04-01 10:05:53,751 autoreload 24776 28164 Watching for file changes with StatReloader
+INFO 2026-04-01 10:06:28,657 autoreload 428 30748 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:06:29,066 autoreload 24776 28164 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:06:30,516 autoreload 30912 9364 Watching for file changes with StatReloader
+INFO 2026-04-01 10:06:30,919 autoreload 32256 28872 Watching for file changes with StatReloader
+INFO 2026-04-01 10:07:36,423 autoreload 30912 9364 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:07:36,729 autoreload 32256 28872 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:07:38,442 autoreload 27272 3332 Watching for file changes with StatReloader
+INFO 2026-04-01 10:07:38,568 autoreload 24816 16568 Watching for file changes with StatReloader
+INFO 2026-04-01 10:07:45,833 autoreload 24088 22096 Watching for file changes with StatReloader
+INFO 2026-04-01 10:10:45,788 autoreload 22188 23564 Watching for file changes with StatReloader
+INFO 2026-04-01 10:12:24,654 autoreload 29956 11608 Watching for file changes with StatReloader
+INFO 2026-04-01 10:13:56,179 log 29956 3320 "OPTIONS /api/auth/register HTTP/1.1" 200 0
+ERROR 2026-04-01 10:13:56,413 log 29956 3320 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:13:56,425 log 29956 3320 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:00,989 log 29956 28084 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:00,992 log 29956 28084 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:01,494 log 29956 2576 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:01,498 log 29956 2576 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:02,269 log 29956 6352 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:02,273 log 29956 6352 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:03,885 log 29956 26068 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:03,888 log 29956 26068 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:04,149 log 29956 5820 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:04,153 log 29956 5820 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:05,697 log 29956 22756 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:05,700 log 29956 22756 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:07,161 log 29956 20612 Internal Server Error: /api/auth/register
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 311, in __call__
+    response = self.process_response(request, response)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 109, in process_response
+    self.get_full_path_with_slash(request)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+    ...<9 lines>...
+    )
+RuntimeError: You called this URL via POST, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining POST data. Change your form to point to localhost:8000/api/auth/register/ (note the trailing slash), or set APPEND_SLASH=False in your Django settings.
+ERROR 2026-04-01 10:14:07,165 log 29956 20612 "POST /api/auth/register HTTP/1.1" 500 86843
+ERROR 2026-04-01 10:14:18,469 log 29956 3668 Internal Server Error: /api/health
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\cache.py", line 29, in _decorator
+    return method(self, *args, **kwargs)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\cache.py", line 99, in _get
+    return self.client.get(key, default=default, version=version, client=client)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\client\default.py", line 300, in get
+    raise ConnectionInterrupted(connection=client) from e
+django_redis.exceptions.ConnectionInterrupted: Redis ConnectionError: Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\deprecation.py", line 308, in __call__
+    response = self.process_request(request)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\middleware\cache.py", line 170, in process_request
+    cache_key = get_cache_key(request, self.key_prefix, "GET", cache=self.cache)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django\utils\cache.py", line 393, in get_cache_key
+    headerlist = cache.get(cache_key)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\cache.py", line 92, in get
+    value = self._get(key, default, version, client)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\cache.py", line 36, in _decorator
+    raise e.__cause__  # noqa: B904
+    ^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\django_redis\client\default.py", line 298, in get
+    value = client.get(key)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\commands\core.py", line 2073, in get
+    return self.execute_command("GET", name, keys=[name])
+           ~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\client.py", line 716, in execute_command
+    return self._execute_command(*args, **options)
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\client.py", line 722, in _execute_command
+    conn = self.connection or pool.get_connection()
+                              ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\utils.py", line 236, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\connection.py", line 3041, in get_connection
+    connection.connect()
+    ~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\connection.py", line 976, in connect
+    self.retry.call_with_retry(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        lambda: self.connect_check_health(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        lambda error: self.disconnect(error),
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\retry.py", line 132, in call_with_retry
+    raise error
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\retry.py", line 120, in call_with_retry
+    return do()
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\connection.py", line 977, in <lambda>
+    lambda: self.connect_check_health(
+            ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        check_health=True, retry_socket_connect=False
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ),
+    ^
+  File "C:\Users\Hussain Sherief A\AppData\Roaming\Python\Python314\site-packages\redis\connection.py", line 1025, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error 10061 connecting to localhost:6379. No connection could be made because the target machine actively refused it.
+ERROR 2026-04-01 10:14:18,476 log 29956 3668 "GET /api/health HTTP/1.1" 500 156848
+INFO 2026-04-01 10:14:18,481 basehttp 29956 3668 - Broken pipe from ('127.0.0.1', 52321)
+INFO 2026-04-01 10:15:15,759 autoreload 22188 23564 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:15,907 autoreload 24088 22096 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:15,914 autoreload 27272 3332 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:16,031 autoreload 29956 11608 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:16,441 autoreload 24816 16568 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:18,739 autoreload 33608 14408 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:18,741 autoreload 24056 8844 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:18,903 autoreload 27972 3508 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:19,135 autoreload 11956 30780 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:19,351 autoreload 10432 31680 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:39,829 autoreload 11956 30780 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:40,082 autoreload 10432 31680 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:40,092 autoreload 27972 3508 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:40,187 autoreload 24056 8844 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:40,582 autoreload 33608 14408 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:47,372 autoreload 19436 21636 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:47,960 autoreload 17204 28480 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:47,972 autoreload 32060 33672 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:48,101 autoreload 16388 33492 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:49,459 autoreload 22316 23520 Watching for file changes with StatReloader
+INFO 2026-04-01 10:15:51,260 autoreload 19436 21636 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:55,305 autoreload 17204 28480 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:55,349 autoreload 32060 33672 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:55,384 autoreload 16388 33492 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:55,714 autoreload 22316 23520 C:\fullstackai\django-backend\config\settings.py changed, reloading.
+INFO 2026-04-01 10:15:56,254 autoreload 6256 14400 Watching for file changes with StatReloader
+INFO 2026-04-01 10:16:02,398 autoreload 30360 6580 Watching for file changes with StatReloader
+INFO 2026-04-01 10:16:02,421 autoreload 17864 17512 Watching for file changes with StatReloader
+INFO 2026-04-01 10:16:02,444 autoreload 17940 32392 Watching for file changes with StatReloader
+INFO 2026-04-01 10:16:02,841 autoreload 19472 24372 Watching for file changes with StatReloader
+INFO 2026-04-01 10:16:08,352 autoreload 1844 5812 Watching for file changes with StatReloader
