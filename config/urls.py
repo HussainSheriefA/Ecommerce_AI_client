@@ -25,6 +25,11 @@ urlpatterns = [
     path('api/products/', include('apps.products.urls')),
     path('api/cart/', include('apps.cart.urls')),
     path('api/orders/', include('apps.orders.urls')),
+    
+    # Google OAuth
+    path('api/auth/social/', include('allauth.urls')),
+    path('api/auth/dj-rest-auth/', include('dj_rest_auth.urls')),
+    path('api/auth/dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
 ]
 
 # Serve media files in development

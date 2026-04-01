@@ -45,6 +45,15 @@ THIRD_PARTY_APPS = [
     'django_celery_beat',
     'django_celery_results',
     'drf_spectacular',
+    'django_filters',
+    # Google OAuth
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 LOCAL_APPS = [
@@ -70,6 +79,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 # =============================================================================
@@ -98,32 +108,23 @@ TEMPLATES = [
 ]
 
 # =============================================================================
-# DATABASE (MySQL or PostgreSQL for Railway)
+# DATABASE (SQLite for local, PostgreSQL for Railway/Render)
 # =============================================================================
-# Check if Railway provides DATABASE_URL (PostgreSQL)
+# Check if Railway/Render provides DATABASE_URL (PostgreSQL)
 DATABASE_URL = os.getenv('DATABASE_URL', '')
 
 if DATABASE_URL:
-    # Use PostgreSQL on Railway
+    # Use PostgreSQL on Railway/Render
     import dj_database_url
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600)
     }
 else:
-    # Use MySQL locally
+    # Use SQLite locally
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.getenv('DB_NAME', 'ecommerce_db'),
-            'USER': os.getenv('DB_USER', 'root'),
-            'PASSWORD': os.getenv('DB_PASSWORD', ''),
-            'HOST': os.getenv('DB_HOST', 'localhost'),
-            'PORT': os.getenv('DB_PORT', '3306'),
-            'OPTIONS': {
-                'charset': 'utf8mb4',
-                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-            },
-            'CONN_MAX_AGE': 600,
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 
@@ -341,4 +342,42 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Production-ready eCommerce API with Django REST Framework',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+}
+
+# =============================================================================
+# DJANGO ALLAUTH (Google OAuth)
+# =============================================================================
+SITE_ID = 1
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+# AllAuth settings
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+
+# Google OAuth settings
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        },
+        'OAUTH_PKCE_ENABLED': True,
+    }
+}
+
+# REST Auth settings
+REST_AUTH = {
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'jwt-auth',
+    'JWT_AUTH_REFRESH_COOKIE': 'jwt-refresh',
 }

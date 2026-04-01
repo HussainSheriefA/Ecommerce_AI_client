@@ -15,4 +15,7 @@ urlpatterns = [
     # Addresses
     path('addresses/', views.AddressListCreateView.as_view(), name='addresses'),
     path('addresses/<int:pk>/', views.AddressDetailView.as_view(), name='address-detail'),
+    
+    # Google OAuth
+    path('google/', views.GoogleLoginView.as_view(), name='google_login'),
 ]
