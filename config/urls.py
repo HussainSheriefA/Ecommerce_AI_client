@@ -5,15 +5,27 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.http import JsonResponse
 from drf_spectacular.views import (
     SpectacularAPIView,
     SpectacularRedocView,
     SpectacularSwaggerView,
 )
 
+# Root API endpoint
+def api_root(request):
+    return JsonResponse({
+        'message': 'Welcome to eCommerce API',
+        'version': '1.0.0',
+        'status': 'running'
+    })
+
 urlpatterns = [
     # Admin
     path('admin/', admin.site.urls),
+    
+    # Root API endpoint
+    path('', api_root, name='api-root'),
     
     # API Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
