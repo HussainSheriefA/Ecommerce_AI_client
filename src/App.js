@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LandingPage from "./Pages/LandingPage";
 import ProductPage from "./Pages/ProductPage";
 import CartPage from "./Pages/CartPage";
@@ -8,11 +8,44 @@ import SignupPage from "./Pages/SignupPage";
 import ProfilePage from "./Pages/ProfilePage";
 import { CartProvider } from "./context/CartContext";
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+          <h1>Something went wrong</h1>
+          <p>Please refresh the page or clear your browser cache.</p>
+          <button onClick={() => window.location.reload()}>Refresh Page</button>
+          <details style={{ marginTop: '20px' }}>
+            <summary>Error Details</summary>
+            <pre>{this.state.error?.toString()}</pre>
+          </details>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 export const products = [
   {
     id:1, name:"Rolex Submariner Date", shortName:"Submariner", price:9500, originalPrice:11200,
-    image:"https://images.unsplash.com/photo-1518544801976-3e1889b9c2c4?w=800&q=90",
-    images:["https://images.unsplash.com/photo-1518544801976-3e1889b9c2c4?w=800&q=90","https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=90","https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=800&q=90"],
+    image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%232F4F4F'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3ESubmariner%3C/text%3E%3C/svg%3E",
+    images:["data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%232F4F4F'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3ESubmariner%3C/text%3E%3C/svg%3E","data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%2300647C'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3EWatch+1%3C/text%3E%3C/svg%3E","data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%232C5F2D'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3EWatch+2%3C/text%3E%3C/svg%3E"],
     category:"Watches", brand:"Rolex", rating:4.9, reviews:2841, badge:"Best Seller",
     description:"The Submariner Date is the reference among divers' watches. Waterproof to a depth of 300 metres, with the iconic unidirectional rotatable bezel in black ceramic.",
     features:["Swiss Automatic Movement","300m Water Resistance","Oystersteel Case","Cerachrom Ceramic Bezel","Sapphire Crystal","72hr Power Reserve"],
@@ -21,8 +54,8 @@ export const products = [
   },
   {
     id:2, name:"Audemars Piguet Royal Oak", shortName:"Royal Oak", price:24500, originalPrice:28000,
-    image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=90",
-    images:["https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=800&q=90","https://images.unsplash.com/photo-1518544801976-3e1889b9c2c4?w=800&q=90"],
+    image:"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%233D2C8D'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3ERoyal+Oak%3C/text%3E%3C/svg%3E",
+    images:["data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%233D2C8D'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3ERoyal+Oak%3C/text%3E%3C/svg%3E","data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800' viewBox='0 0 800 800'%3E%3Crect width='800' height='800' fill='%238F6DA3'/%3E%3Ctext x='400' y='420' fill='%23FFFFFF' font-size='48' font-family='Arial' text-anchor='middle'%3ERoyal+Oak+Alt%3C/text%3E%3C/svg%3E"],
     category:"Watches", brand:"Audemars Piguet", rating:4.8, reviews:1203, badge:"Limited",
     description:"The Royal Oak Selfwinding is one of the most iconic luxury sports watches ever created. Its distinctive octagonal bezel and integrated bracelet changed watchmaking forever.",
     features:["Calibre 4302 Movement","50m Water Resistance","Stainless Steel","Tapisserie Dial","Integrated Bracelet","Self-Winding"],
@@ -133,18 +166,21 @@ export const products = [
 
 function App() {
   return (
-    <CartProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<LandingPage products={products}/>}/>
-          <Route path="/product/:id" element={<ProductPage products={products}/>}/>
-          <Route path="/cart" element={<CartPage/>}/>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/signup" element={<SignupPage/>}/>
-          <Route path="/profile" element={<ProfilePage/>}/>
-        </Routes>
-      </BrowserRouter>
-    </CartProvider>
+    <ErrorBoundary>
+      <CartProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<LandingPage products={products}/>}/>
+            <Route path="/product/:id" element={<ProductPage products={products}/>}/>
+            <Route path="/cart" element={<CartPage/>}/>
+            <Route path="/login" element={<LoginPage/>}/>
+            <Route path="/signup" element={<SignupPage/>}/>
+            <Route path="/profile" element={<ProfilePage/>}/>
+            <Route path="/api/*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </CartProvider>
+    </ErrorBoundary>
   );
 }
 export default App;

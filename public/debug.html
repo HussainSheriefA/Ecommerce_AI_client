@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VELUR - Debug Test</title>
+    <style>
+        body { 
+            background: #07070a; 
+            color: #f0ece6; 
+            font-family: sans-serif;
+            padding: 40px;
+        }
+        .debug-box {
+            background: #151519;
+            border: 1px solid #c9a84c;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        .success { color: #3ecf6e; }
+        .error { color: #e05c5c; }
+        .info { color: #5c8de0; }
+        button {
+            background: #c9a84c;
+            color: #07070a;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #e8c97a;
+        }
+        pre {
+            background: #0e0e12;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 VELUR Debug Test Page</h1>
+    
+    <div class="debug-box">
+        <h2>Step 1: Basic Browser Test</h2>
+        <p>If you can see this text, your browser is working correctly.</p>
+        <p><strong>Current Time:</strong> <span id="time"></span></p>
+    </div>
+
+    <div class="debug-box">
+        <h2>Step 2: Connection Tests</h2>
+        <button onclick="testReact()">Test React (Port 3000)</button>
+        <button onclick="testDjango()">Test Django (Port 8000)</button>
+        <button onclick="clearCache()">Clear Cache & Reload</button>
+        
+        <div id="results"></div>
+    </div>
+
+    <div class="debug-box">
+        <h2>Step 3: Console Check</h2>
+        <p>Press <strong>F12</strong> to open Developer Tools</p>
+        <p>Click on the <strong>Console</strong> tab</p>
+        <p>Look for any RED error messages</p>
+        <button onclick="testConsole()">Run Console Test</button>
+        <pre id="console-test"></pre>
+    </div>
+
+    <div class="debug-box">
+        <h2>Step 4: Quick Fixes</h2>
+        <ol>
+            <li><strong>Hard Refresh:</strong> Press Ctrl + Shift + R</li>
+            <li><strong>Clear Cache:</strong> Click button above or press Ctrl + Shift + Delete</li>
+            <li><strong>Check Console:</strong> F12 → Console tab → Screenshot any errors</li>
+            <li><strong>Try Direct URLs:</strong> 
+                <ul>
+                    <li><a href="http://localhost:3000/" target="_blank">http://localhost:3000/</a></li>
+                    <li><a href="http://localhost:3000/login" target="_blank">http://localhost:3000/login</a></li>
+                    <li><a href="http://localhost:3000/signup" target="_blank">http://localhost:3000/signup</a></li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <script>
+        // Update time
+        document.getElementById('time').textContent = new Date().toLocaleString();
+
+        // Test React
+        async function testReact() {
+            const resultsDiv = document.getElementById('results');
+            try {
+                const response = await fetch('http://localhost:3000/');
+                if (response.ok) {
+                    resultsDiv.innerHTML += `<p class="success">✅ React is running on port 3000</p>`;
+                } else {
+                    resultsDiv.innerHTML += `<p class="error">❌ React returned status: ${response.status}</p>`;
+                }
+            } catch (error) {
+                resultsDiv.innerHTML += `<p class="error">❌ Cannot reach React: ${error.message}</p>`;
+            }
+        }
+
+        // Test Django
+        async function testDjango() {
+            const resultsDiv = document.getElementById('results');
+            try {
+                const response = await fetch('http://localhost:8000/');
+                const data = await response.json();
+                resultsDiv.innerHTML += `<p class="success">✅ Django is running: ${data.message}</p>`;
+            } catch (error) {
+                resultsDiv.innerHTML += `<p class="error">❌ Cannot reach Django: ${error.message}</p>`;
+            }
+        }
+
+        // Clear cache
+        function clearCache() {
+            if (confirm('This will clear your browser cache and reload the page. Continue?')) {
+                localStorage.clear();
+                sessionStorage.clear();
+                location.reload(true);
+            }
+        }
+
+        // Console test
+        function testConsole() {
+            const output = document.getElementById('console-test');
+            try {
+                // Test basic JS
+                output.textContent = '✓ JavaScript is working\n';
+                output.textContent += '✓ DOM access successful\n';
+                
+                // Test React availability (if loaded)
+                if (typeof React !== 'undefined') {
+                    output.textContent += `✓ React loaded (version: ${React.version})\n`;
+                } else {
+                    output.textContent += '⚠ React not detected (this is normal on this test page)\n';
+                }
+                
+                // Test fetch
+                output.textContent += '✓ Fetch API available\n';
+                
+                output.textContent += '\n📋 Next: Check main React app for errors:\n';
+                output.textContent += '1. Go to http://localhost:3000\n';
+                output.textContent += '2. Press F12\n';
+                output.textContent += '3. Check Console tab for RED errors\n';
+                
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n`;
+            }
+        }
+
+        // Auto-run console test
+        testConsole();
+    </script>
+</body>
+</html>

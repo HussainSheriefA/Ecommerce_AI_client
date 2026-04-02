@@ -316,8 +316,18 @@ export default function LandingPage({ products: propProducts }) {
   // Check if user is logged in
   useEffect(() => {
     const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
+    if (userData && userData !== 'undefined' && userData !== 'null') {
+      try {
+        const parsed = JSON.parse(userData);
+        if (parsed && typeof parsed === 'object') {
+          setUser(parsed);
+        } else {
+          localStorage.removeItem('user');
+        }
+      } catch (e) {
+        console.error('Error parsing user data:', e);
+        localStorage.removeItem('user');
+      }
     }
   }, []);
 

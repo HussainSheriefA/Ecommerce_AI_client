@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { authAPI } from "../services/api";
+import { authAPI, checkAPIHealth } from "../services/api";
 import "./LoginPage.css";
 
 export default function SignupPage() {
@@ -13,10 +13,53 @@ export default function SignupPage() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate name
+    if (!formData.name || formData.name.trim().length < 2) {
+      errors.name = 'Name must be at least 2 characters long';
+    }
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    
+    // Validate password strength
+    if (formData.password) {
+      if (formData.password.length < 8) {
+        errors.password = 'Password must be at least 8 characters';
+      } else if (!/[A-Z]/.test(formData.password)) {
+        errors.password = 'Password must contain at least one uppercase letter';
+      } else if (!/[a-z]/.test(formData.password)) {
+        errors.password = 'Password must contain at least one lowercase letter';
+      } else if (!/\d/.test(formData.password)) {
+        errors.password = 'Password must contain at least one number';
+      }
+    } else {
+      errors.password = 'Password is required';
+    }
+    
+    // Validate password confirmation
+    if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    setFormData({ ...formData, [fieldName]: fieldValue });
     setError("");
+    // Clear validation error for this field as user types
+    setValidationErrors(prev => ({ ...prev, [fieldName]: '' }));
   };
 
   const handleSubmit = async (e) => {
@@ -24,15 +67,25 @@ export default function SignupPage() {
     setIsLoading(true);
     setError("");
 
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+    // Validate form before submission
+    if (!validateForm()) {
       setIsLoading(false);
       return;
     }
 
     try {
-      console.log('🔐 Attempting registration with:', formData);
+      // First, check if the API is healthy
+      console.log('🏥 Checking API health...');
+      const healthStatus = await checkAPIHealth();
+      
+      if (!healthStatus.healthy) {
+        console.error('❌ API health check failed:', healthStatus.error);
+        throw new Error(healthStatus.error || 'Backend server is not responding');
+      }
+      
+      console.log('✅ API health check passed');
+      
+      console.log('🔐 Attempting registration with:', { name: formData.name, email: formData.email, password: '***' });
       const response = await authAPI.register({
         name: formData.name,
         email: formData.email,
@@ -42,16 +95,21 @@ export default function SignupPage() {
       
       console.log('✅ Registration response:', response);
       console.log('Response type:', typeof response);
-      console.log('Has access?', 'access' in response);
-      console.log('Has user?', 'user' in response);
-      
-      // Save token to localStorage (Django returns 'access' not 'token')
-      if (response && response.access) {
-        localStorage.setItem('token', response.access);
-        localStorage.setItem('user', JSON.stringify(response.user));
-        
-        // Redirect to profile page
-        navigate("/profile");
+
+      const token = response?.data?.token || response?.token || response?.access;
+      const user = response?.data?.user || response?.user;
+      const isSuccess = response?.success === true || response?.status === 201;
+
+      if (isSuccess) {
+        if (token) {
+          localStorage.setItem('token', token);
+        }
+        if (user) {
+          localStorage.setItem('user', JSON.stringify(user));
+        }
+
+        // Redirect to login page after registration
+        navigate("/login");
       } else {
         throw new Error('Invalid response format from server');
       }
@@ -62,7 +120,20 @@ export default function SignupPage() {
         name: err.name,
         stack: err.stack
       });
-      setError(err.message || "Registration failed. Please try again.");
+      
+      // More specific error messages
+      let errorMessage = "Registration failed. Please try again.";
+      if (err.message.includes('Unable to connect') || err.message.includes('not responding')) {
+        errorMessage = "Unable to connect to server. Please ensure the Django backend is running on http://localhost:8000";
+      } else if (err.message.includes('health check failed')) {
+        errorMessage = err.message;
+      } else if (err.message.includes('already registered')) {
+        errorMessage = "This email is already registered. Please login instead.";
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -94,6 +165,9 @@ export default function SignupPage() {
                 required
                 disabled={isLoading}
               />
+              {validationErrors.name && (
+                <span className="field-error">{validationErrors.name}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -107,6 +181,9 @@ export default function SignupPage() {
                 required
                 disabled={isLoading}
               />
+              {validationErrors.email && (
+                <span className="field-error">{validationErrors.email}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -114,13 +191,16 @@ export default function SignupPage() {
               <input
                 type="password"
                 name="password"
-                placeholder="Create a password"
+                placeholder="Create a password (min 8 characters)"
                 value={formData.password}
                 onChange={handleChange}
                 required
                 disabled={isLoading}
-                minLength="6"
+                minLength="8"
               />
+              {validationErrors.password && (
+                <span className="field-error">{validationErrors.password}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -134,6 +214,9 @@ export default function SignupPage() {
                 required
                 disabled={isLoading}
               />
+              {validationErrors.confirmPassword && (
+                <span className="field-error">{validationErrors.confirmPassword}</span>
+              )}
             </div>
 
             <button type="submit" className="submit-btn" disabled={isLoading}>

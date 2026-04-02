@@ -38,6 +38,11 @@ export function CartProvider({ children }) {
       }
     } catch (error) {
       console.error('Failed to load cart:', error.message);
+      // If token is invalid, clear it
+      if (error.message.includes('token') || error.message.includes('Token')) {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+      }
     } finally {
       setIsLoading(false);
     }

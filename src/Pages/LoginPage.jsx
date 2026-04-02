@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./LoginPage.css";
 import { useNavigate } from "react-router-dom";
-import { authAPI } from "../services/api";
+import { authAPI, checkAPIHealth } from "../services/api";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -11,6 +11,19 @@ export default function LoginPage() {
   });
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [validationErrors, setValidationErrors] = useState({});
+  const [welcomeName, setWelcomeName] = useState("");
+
+  // Setup welcome name from existing localStorage user
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData && userData !== 'undefined' && userData !== 'null') {
+      try {
+        const parsed = JSON.parse(userData);
+        setWelcomeName(parsed?.name || '');
+      } catch { /* ignore */ }
+    }
+  }, []);
 
   // Initialize Google OAuth
   useEffect(() => {
@@ -32,7 +45,9 @@ export default function LoginPage() {
       
       // Save token and user data
       localStorage.setItem('token', result.access);
-      localStorage.setItem('user', JSON.stringify(result.user));
+      if (result.user) {
+        localStorage.setItem('user', JSON.stringify(result.user));
+      }
       
       // Redirect to profile page
       navigate("/profile");
@@ -51,9 +66,31 @@ export default function LoginPage() {
     }
   };
 
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email || !emailRegex.test(formData.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    
+    // Validate password is not empty
+    if (!formData.password) {
+      errors.password = 'Password is required';
+    }
+    
+    setValidationErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const fieldName = e.target.name;
+    const fieldValue = e.target.value;
+    setFormData({ ...formData, [fieldName]: fieldValue });
     setError("");
+    // Clear validation error for this field as user types
+    setValidationErrors(prev => ({ ...prev, [fieldName]: '' }));
   };
 
   const handleSubmit = async (e) => {
@@ -61,28 +98,63 @@ export default function LoginPage() {
     setIsLoading(true);
     setError("");
 
+    // Validate form before submission
+    if (!validateForm()) {
+      setIsLoading(false);
+      return;
+    }
+
     try {
-      console.log('🔐 Attempting login with:', formData);
+      // First, check if the API is healthy
+      console.log('🏥 Checking API health...');
+      const healthStatus = await checkAPIHealth();
+      
+      if (!healthStatus.healthy) {
+        console.warn('⚠️ API health check failed, but proceeding to login attempt:', healthStatus.error);
+      } else {
+        console.log('✅ API health check passed');
+      }
+      
+      // Clear any existing token before new login
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      
+      // Django REST Framework expects 'email' and 'password' fields
+      console.log('🔐 Attempting login with:', { email: formData.email, password: '***' });
       const response = await authAPI.login(formData);
       
       console.log('✅ Login response:', response);
-      
-      // Save token to localStorage (Django returns 'access' not 'token')
-      if (response && response.access) {
-        localStorage.setItem('token', response.access);
-        
-        // Fetch user data using the token
-        try {
-          const userResponse = await authAPI.getMe();
-          console.log('👤 User data:', userResponse);
-          localStorage.setItem('user', JSON.stringify(userResponse));
-        } catch (userErr) {
-          console.warn('Could not fetch user data, using email as fallback');
-          // Fallback: store email as user data
-          localStorage.setItem('user', JSON.stringify({ email: formData.email, name: formData.email.split('@')[0] }));
+
+      const token = response?.data?.token || response?.token || response?.access;
+      const loginUser = response?.data?.user || response?.user;
+
+      if (token) {
+        localStorage.setItem('token', token);
+
+        // Save user directly if available
+        if (loginUser) {
+          localStorage.setItem('user', JSON.stringify(loginUser));
+          setWelcomeName(loginUser?.name || formData.email.split('@')[0]);
         }
-        
-        // Redirect to profile page
+
+        // Fetch user data if not returned from login
+        if (!loginUser) {
+          try {
+            const userResponse = await authAPI.getMe();
+            console.log('👤 User data:', userResponse);
+            const fetchedUser = userResponse?.data?.user || userResponse?.user;
+            if (fetchedUser) {
+              localStorage.setItem('user', JSON.stringify(fetchedUser));
+              setWelcomeName(fetchedUser?.name || formData.email.split('@')[0]);
+            }
+          } catch (userErr) {
+            console.warn('Could not fetch user data, using email as fallback');
+            const fallbackUser = { email: formData.email, name: formData.email.split('@')[0] };
+            localStorage.setItem('user', JSON.stringify(fallbackUser));
+            setWelcomeName(fallbackUser.name);
+          }
+        }
+
         navigate("/profile");
       } else {
         throw new Error('Invalid response format from server');
@@ -94,7 +166,20 @@ export default function LoginPage() {
         name: err.name,
         stack: err.stack
       });
-      setError(err.message || "Invalid email or password");
+      
+      // More specific error messages
+      let errorMessage = "Invalid email or password";
+      if (err.message.includes('Unable to connect') || err.message.includes('not responding')) {
+        errorMessage = "Unable to connect to server. Please ensure the Django backend is running on http://localhost:8000";
+      } else if (err.message.includes('No active account')) {
+        errorMessage = "Invalid credentials. Please check your email and password.";
+      } else if (err.message.includes('health check failed')) {
+        errorMessage = err.message;
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
@@ -108,7 +193,7 @@ export default function LoginPage() {
           <div className="brand-logo" onClick={() => navigate("/")} style={{ cursor: 'pointer' }}>VELUR</div>
           
           <div className="form-header">
-            <h1>Welcome back</h1>
+            <h1>Welcome back{welcomeName ? `, ${welcomeName.split(' ')[0]}` : ''}</h1>
             <p>Sign in to access your account and continue shopping</p>
           </div>
 
@@ -126,6 +211,9 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
               />
+              {validationErrors.email && (
+                <span className="field-error">{validationErrors.email}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -139,6 +227,9 @@ export default function LoginPage() {
                 required
                 disabled={isLoading}
               />
+              {validationErrors.password && (
+                <span className="field-error">{validationErrors.password}</span>
+              )}
             </div>
 
             <button type="submit" className="submit-btn" disabled={isLoading}>
