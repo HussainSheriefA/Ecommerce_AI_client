@@ -20,9 +20,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-change-in-production')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 # Railway provides HOSTNAME env var, or use ALLOWED_HOSTS from env
-RAILWAY_HOST = os.getenv('HOSTNAME', '')
-ALLOWED_HOSTS_ENV = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
-ALLOWED_HOSTS = ALLOWED_HOSTS_ENV + ([RAILWAY_HOST] if RAILWAY_HOST else [])
+# =============================================================================
+# ALLOWED HOSTS (FIXED FOR RENDER)
+# =============================================================================
+ALLOWED_HOSTS = [
+    "ecommerce-ai-client-1.onrender.com",
+    "localhost",
+    "127.0.0.1"
+]
 
 # =============================================================================
 # APPLICATION DEFINITION
@@ -258,15 +263,18 @@ SIMPLE_JWT = {
 # CORS CONFIGURATION
 # =============================================================================
 # Allow specific origins for production (Vercel frontend)
-CORS_ALLOWED_ORIGINS = os.getenv(
-    'CORS_ALLOWED_ORIGINS',
-    'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,https://ecommerce-ai-client-tau.vercel.app'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://ecommerce-ai-client-tau.vercel.app"
+]
 
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    'CSRF_TRUSTED_ORIGINS',
-    'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,https://ecommerce-ai-client-tau.vercel.app'
-).split(',')
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "https://ecommerce-ai-client-tau.vercel.app",
+    "https://ecommerce-ai-client-1.onrender.com"
+]
 
 # CRITICAL: Must be False when using credentials (cookies/auth headers)
 CORS_ALLOW_ALL_ORIGINS = False
