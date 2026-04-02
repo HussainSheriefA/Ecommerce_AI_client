@@ -264,14 +264,12 @@ SIMPLE_JWT = {
 # =============================================================================
 # Allow specific origins for production (Vercel frontend)
 CORS_ALLOWED_ORIGINS = [
+    "https://ecommerce-ai-client-tau.vercel.app",
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://ecommerce-ai-client-tau.vercel.app"
+    "http://127.0.0.1:3000"
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
     "https://ecommerce-ai-client-tau.vercel.app",
     "https://ecommerce-ai-client-1.onrender.com"
 ]
